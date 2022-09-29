@@ -3,7 +3,7 @@ import "./App.css";
 import { useEffect, useState } from "react";
 
 function App() {
-  const [answer, setAnswer] = useState("fetch");
+  const [answer, setAnswer] = useState("fleet");
   const [currentGuess, setCurrentGuess] = useState(0);
   const [guessList, setGuessList] = useState<string[]>(new Array(6).fill(""));
   const [cellStyles, setCellStyles] = useState(new Array(6).fill("WWWWW"));
@@ -13,7 +13,10 @@ function App() {
     for (let i = 0; i < guess.length; i++) {
       if (guess[i] === answer[i]) {
         styleArray[i] = "E"; // Exact Match
-      } else if (answer.includes(guess[i])) {
+      } else if (
+        answer.includes(guess[i]) &&
+        styleArray[answer.lastIndexOf(guess[i])] !== "E"
+      ) {
         styleArray[i] = "P"; // Partial Match
       } else {
         styleArray[i] = "N"; // No match
