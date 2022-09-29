@@ -1,0 +1,12 @@
+.cell {
+  font-size: 2.5rem;
+  font-weight: bolder;
+  display: inline-block;
+  padding: 0.7rem;
+  text-transform: uppercase;
+  margin: 0.4rem;
+  border: 1px solid black;
+  border-radius: 7px;
+  min-height: 30px;
+  min-width: 30px;
+}
