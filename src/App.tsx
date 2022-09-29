@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 function App() {
   const [answer, setAnswer] = useState("fleet");
+  const [isGameOver, setIsGameOver] = useState(false);
   const [currentGuess, setCurrentGuess] = useState(0);
   const [guessList, setGuessList] = useState<string[]>(new Array(6).fill(""));
   const [cellStyles, setCellStyles] = useState(new Array(6).fill("WWWWW"));
@@ -22,6 +23,9 @@ function App() {
         styleArray[i] = "N"; // No match
       }
     }
+    if (styleArray.join("") === "EEEEE") {
+      setIsGameOver(true);
+    }
     setCellStyles((prevStyles) => {
       let updatedStyles = [...prevStyles];
       updatedStyles[currentGuess] = styleArray.join("");
@@ -30,7 +34,7 @@ function App() {
   };
 
   const keyPressHandler = (event: KeyboardEvent) => {
-    if (currentGuess > 5) return;
+    if (currentGuess > 5) setIsGameOver(true);
     if (event.key.match(/^[a-zA-Z]$/)) {
       if (guessList[currentGuess].length < 5) {
         setGuessList((prevList) => {
@@ -53,13 +57,15 @@ function App() {
     }
   };
   useEffect(() => {
-    console.log(cellStyles);
     document.body.addEventListener("keydown", keyPressHandler);
 
+    if (isGameOver) {
+      document.body.removeEventListener("keydown", keyPressHandler);
+    }
     return () => {
       document.body.removeEventListener("keydown", keyPressHandler);
     };
-  }, [guessList, currentGuess]);
+  }, [guessList, currentGuess, isGameOver]);
   return (
     <main className="App">
       <h1>Wordle</h1>
