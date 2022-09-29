@@ -3,6 +3,7 @@ import styles from "./WordRow.module.css";
 
 type Props = {
   word: string;
+  rowStyle: string;
 };
 
 const WordRow: React.FC<Props> = (props) => {
@@ -15,7 +16,7 @@ const WordRow: React.FC<Props> = (props) => {
   return (
     <div className={styles.row}>
       {auxWordArray.map((char, idx) => (
-        <Cell key={idx} value={char} />
+        <Cell key={idx} value={char} style={props.rowStyle[idx]} />
       ))}
     </div>
   );

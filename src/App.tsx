@@ -3,8 +3,29 @@ import "./App.css";
 import { useEffect, useState } from "react";
 
 function App() {
+  const [answer, setAnswer] = useState("fetch");
   const [currentGuess, setCurrentGuess] = useState(0);
   const [guessList, setGuessList] = useState<string[]>(new Array(6).fill(""));
+  const [cellStyles, setCellStyles] = useState(new Array(6).fill("WWWWW"));
+
+  const updateRowStyles = (guess: string) => {
+    let styleArray = new Array(5).fill("");
+    for (let i = 0; i < guess.length; i++) {
+      if (guess[i] === answer[i]) {
+        styleArray[i] = "E"; // Exact Match
+      } else if (answer.includes(guess[i])) {
+        styleArray[i] = "P"; // Partial Match
+      } else {
+        styleArray[i] = "N"; // No match
+      }
+    }
+    setCellStyles((prevStyles) => {
+      let updatedStyles = [...prevStyles];
+      updatedStyles[currentGuess] = styleArray.join("");
+      return updatedStyles;
+    });
+  };
+
   const keyPressHandler = (event: KeyboardEvent) => {
     if (currentGuess > 5) return;
     if (event.key.match(/^[a-zA-Z]$/)) {
@@ -24,10 +45,12 @@ function App() {
       });
     }
     if (event.key === "Enter" && guessList[currentGuess].length === 5) {
+      updateRowStyles(guessList[currentGuess]);
       setCurrentGuess((prevGuess) => prevGuess + 1);
     }
   };
   useEffect(() => {
+    console.log(cellStyles);
     document.body.addEventListener("keydown", keyPressHandler);
 
     return () => {
@@ -39,7 +62,7 @@ function App() {
       <h1>Wordle</h1>
 
       {guessList.map((guess, idx) => (
-        <WordRow key={idx} word={guess} />
+        <WordRow key={idx} word={guess} rowStyle={cellStyles[idx]} />
       ))}
     </main>
   );
