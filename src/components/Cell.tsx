@@ -1,8 +1,14 @@
 import styles from "./Cell.module.css";
-type Props = {};
+type Props = {
+  value?: string;
+};
 
-const Cell: React.FC<Props> = () => {
-  return <span className={styles.cell}>Q</span>;
+const Cell: React.FC<Props> = (props) => {
+  return (
+    <span className={styles.cell}>
+      <span>{props?.value}</span>
+    </span>
+  );
 };
 
 export default Cell;
